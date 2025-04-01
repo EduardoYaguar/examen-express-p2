@@ -6,22 +6,27 @@ var db = require('../models');
 router.get('/buscar', function(req, res, next) {
   res.render('servicios/buscar');
 });
+router.get('/tabla-rangos', function(req, res, next) {
+    res.render('servicios/tabla-rangos');
+  });
+  router.get('/tabla', function(req, res, next) {
+    res.render('servicios/tabla');
+  });
 
-// Ruta para la página principal de servicios (redirige al formulario de búsqueda)
 router.get('/', function(req, res, next) {
   res.redirect('/servicios/buscar');
 });
 
-// Ruta para obtener un servicio por ID (GET)
+
 router.get('/buscar/:id', async function(req, res, next) {
   try {
     const servicioId = req.params.id;
     
-    // Buscar el servicio por ID incluyendo las áreas relacionadas
+
     const servicio = await db.Servicio.findByPk(servicioId, {
       include: [{
         model: db.ropa,
-        through: { attributes: [] } // Excluye los atributos de la tabla intermedia
+        through: { attributes: [] } 
       }]
     });
     
@@ -40,7 +45,7 @@ router.get('/buscar/:id', async function(req, res, next) {
   }
 });
 
-// Ruta para manejar la búsqueda mediante POST (para el formulario)
+
 router.post('/buscar', function(req, res, next) {
   const servicioId = req.body.id;
   res.redirect(`/servicios/buscar/${servicioId}`);
